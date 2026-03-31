@@ -5,10 +5,6 @@ on:
     branches:
       - main
 
-env:
-  SKIP_BUILD_COMMAND: "true"
-  ENABLE_ORYX_BUILD: "false"
-
 jobs:
   build_and_deploy_job:
     runs-on: ubuntu-latest
@@ -20,26 +16,21 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 10
+          run_install: false
 
       - name: Install dependencies
         run: pnpm install
+        working-directory: .
 
-      - name: Build project
-        ###### THE "KEY IN THE LOCK" FIX ######
-        # We find the folder and then tell Vite exactly where index.html is
-        run: |
-          BUILD_PATH=$(find . -name "package.json" -not -path "*/node_modules/*" -exec dirname {} \;)
-          cd $BUILD_PATH
-          npx vite build public/index.html --emptyOutDir
-        ###### END OF FIX ####################
-
-      - name: Deploy to Azure
+      - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/" 
-          output_location: "dist" 
-          skip_app_build: true
+          ###### STRICT REPLIT AGENT INSTRUCTIONS ######
+          app_location: "artifacts/nba-survey"
+          output_location: "dist/public"
+          app_build_command: "pnpm --filter @workspace/nba-survey run build"
+          ###### END OF INSTRUCTIONS ###################
