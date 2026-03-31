@@ -22,8 +22,8 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          ###### LOCKED IN FIXES ######
-          app_location: "/nba-survey" 
+          ###### THE GOD-MODE FIX ######
+          app_location: "/" 
           api_location: ""
           output_location: "dist" 
           app_build_command: "npx pnpm install && npx pnpm run build"
