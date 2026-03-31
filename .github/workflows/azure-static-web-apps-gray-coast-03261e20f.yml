@@ -25,12 +25,12 @@ jobs:
         run: pnpm install
 
       - name: Build project
-        ###### THE "FIND AND BUILD" FIX ######
-        # This finds the vite file automatically so we don't have to guess the folder
+        ###### THE "KEY IN THE LOCK" FIX ######
+        # We find the folder and then tell Vite exactly where index.html is
         run: |
           BUILD_PATH=$(find . -name "package.json" -not -path "*/node_modules/*" -exec dirname {} \;)
           cd $BUILD_PATH
-          npx vite build
+          npx vite build public/index.html --emptyOutDir
         ###### END OF FIX ####################
 
       - name: Deploy to Azure
