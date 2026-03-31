@@ -11,9 +11,6 @@ jobs:
     name: Build and Deploy Job
     steps:
       - uses: actions/checkout@v3
-        with:
-          submodules: true
-          lfs: false
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -23,7 +20,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-        working-directory: .
 
       - name: Build And Deploy
         id: builddeploy
@@ -32,10 +28,9 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          ###### REPLIT AGENT SETTINGS ######
-          app_location: "nba-survey" 
+          ###### THE FINAL LOCATION FIX ######
+          app_location: "/" 
           api_location: ""
           output_location: "dist" 
           app_build_command: "pnpm run build"
-          ###### END OF SETTINGS ############
-          
+          ###### END OF FIX ##################
