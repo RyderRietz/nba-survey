@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+env:
+  SKIP_BUILD_COMMAND: "true"
+  ENABLE_ORYX_BUILD: "false"
+
 jobs:
   build_and_deploy_job:
     runs-on: ubuntu-latest
@@ -16,12 +20,14 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 10
-          run_install: false
 
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build And Deploy
+      - name: Build project
+        run: pnpm run build
+
+      - name: Deploy to Azure
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
@@ -29,14 +35,5 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "/" 
-          api_location: ""
           output_location: "dist" 
-          ###### THE "SHUT DOWN AUTOPILOT" FIX ######
-          skip_app_build: false 
-          app_build_command: "pnpm run build"
-          skip_deploy_on_root_error: true
-        env:
-          ###### FORCE AZURE TO USE PNPM ######
-          ENABLE_ORYX_BUILD: false
-          SCM_DO_BUILD_DURING_DEPLOYMENT: false
-          ###### END OF FIX ###################
+          skip_app_build: true # This tells the Azure Action "I already built it, just upload"
