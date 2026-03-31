@@ -25,6 +25,4 @@ jobs:
           app_location: "/" 
           api_location: ""
           output_location: "dist" 
-          ###### PNPM FIX ######
-          app_build_command: "npx pnpm install && npx pnpm run build" 
-          ###### END OF FIX ####
+          app_build_command: "npx pnpm install && npx pnpm run build"
