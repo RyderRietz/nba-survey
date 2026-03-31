@@ -28,9 +28,15 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          ###### THE FINAL LOCATION FIX ######
           app_location: "/" 
           api_location: ""
           output_location: "dist" 
+          ###### THE "SHUT DOWN AUTOPILOT" FIX ######
+          skip_app_build: false 
           app_build_command: "pnpm run build"
-          ###### END OF FIX ##################
+          skip_deploy_on_root_error: true
+        env:
+          ###### FORCE AZURE TO USE PNPM ######
+          ENABLE_ORYX_BUILD: false
+          SCM_DO_BUILD_DURING_DEPLOYMENT: false
+          ###### END OF FIX ###################
