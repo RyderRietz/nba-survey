@@ -25,11 +25,13 @@ jobs:
         run: pnpm install
 
       - name: Build project
-        ###### THE "FORCE VITE" FIX ######
-        # This tells the computer to skip the scripts and just build the app
-        run: npx vite build
-        working-directory: "nba-survey"
-        ###### END OF FIX ################
+        ###### THE "FIND AND BUILD" FIX ######
+        # This finds the vite file automatically so we don't have to guess the folder
+        run: |
+          BUILD_PATH=$(find . -name "package.json" -not -path "*/node_modules/*" -exec dirname {} \;)
+          cd $BUILD_PATH
+          npx vite build
+        ###### END OF FIX ####################
 
       - name: Deploy to Azure
         id: builddeploy
@@ -39,5 +41,5 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "/" 
-          output_location: "nba-survey/dist" 
+          output_location: "dist" 
           skip_app_build: true
