@@ -25,10 +25,11 @@ jobs:
         run: pnpm install
 
       - name: Build project
-        ###### THE "SKIP THE NONSENSE" FIX ######
-        # This ignores the typecheck and just builds the files
-        run: pnpm run build --if-present --filter "./nba-survey"
-        ###### END OF FIX #######################
+        ###### THE "FORCE VITE" FIX ######
+        # This tells the computer to skip the scripts and just build the app
+        run: npx vite build
+        working-directory: "nba-survey"
+        ###### END OF FIX ################
 
       - name: Deploy to Azure
         id: builddeploy
@@ -38,5 +39,5 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "/" 
-          output_location: "dist" 
+          output_location: "nba-survey/dist" 
           skip_app_build: true
